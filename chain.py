@@ -98,7 +98,7 @@ _inputs = RunnableParallel(
 )
 
 chain = (
-    (_inputs | ANSWER_PROMPT | ChatGoogleGenerativeAI(model="gemini-1.5-pro", api_key=google_api_key, temperature=0.4) | StrOutputParser())
+    (_inputs | ANSWER_PROMPT | ChatGoogleGenerativeAI(model="gemini-1.5-pro", api_key=google_api_key, temperature=0.7) | StrOutputParser())
     .with_types(input_type=ChatHistory)
     .with_fallbacks(
         [
