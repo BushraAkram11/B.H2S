@@ -44,55 +44,66 @@ st.markdown(
 with st.sidebar:
     st.image("https://yt3.googleusercontent.com/G5iAGza6uApx12jz1CBkuuysjvrbonY1QBM128IbDS6bIH_9FvzniqB_b5XdtwPerQRN9uk1=s900-c-k-c0x00ffffff-no-rj", width=290)
     st.sidebar.subheader("Google API Key")
-    user_google_api_key = st.sidebar.text_input("🔑 Enter your Google Gemini API key to Ask Questions", type="password", key="password_input", help="Enter your Google API key here", placeholder="Your Google API Key")
+    user_google_api_key = st.sidebar.text_input(
+        "🔑 Enter your Google Gemini API key to Ask Questions",
+        type="password",
+        key="password_input",
+        help="Enter your Google API key here",
+        placeholder="Your Google API Key"
+    )
+    # Store the API key in session state
+    st.session_state.google_api_key = user_google_api_key
 
-# Default Google API Key (use your actual key here)
-default_google_api_key = "YOUR_DEFAULT_GOOGLE_API_KEY"
+# Ensure the user has provided an API key
+if not st.session_state.google_api_key:
+    st.warning("Please enter your Google API key in the sidebar to use the chatbot.")
+else:
+    prompt = ChatPromptTemplate(
+        messages=[
+            MessagesPlaceholder(variable_name="chat_history"),
+            HumanMessagePromptTemplate.from_template("{question}"),
+        ]
+    )
 
-# Determine which API key to use (user's key if provided, otherwise default key)
-google_api_key = user_google_api_key if user_google_api_key else default_google_api_key
+    msgs = StreamlitChatMessageHistory(key="langchain_messages")
 
-prompt = ChatPromptTemplate(
-    messages=[
-        MessagesPlaceholder(variable_name="chat_history"),
-        HumanMessagePromptTemplate.from_template("{question}"),
-    ]
-)
+    if len(msgs.messages) == 0:
+        msgs.add_ai_message("How can I assist you today?")
 
-msgs = StreamlitChatMessageHistory(key="langchain_messages")
+    for msg in msgs.messages:
+        st.chat_message(msg.type).write(msg.content)
 
-if len(msgs.messages) == 0:
-    msgs.add_ai_message("How can I assist you today?")
+    if prompt := st.chat_input():
+        st.chat_message("human").write(prompt)
 
-for msg in msgs.messages:
-    st.chat_message(msg.type).write(msg.content)
+        with st.chat_message("assistant"):
+            message_placeholder = st.empty()
+            full_response = ""
 
-if prompt := st.chat_input():
-    st.chat_message("human").write(prompt)
+            try:
+                _chat_history = st.session_state.langchain_messages[1:40]
+                _chat_history_tranform = list(
+                    chunked([msg.content for msg in _chat_history], n=2)
+                )
 
-    with st.chat_message("assistant"):
-        message_placeholder = st.empty()
-        full_response = ""
+                from chain import chain
 
-        try:
-            _chat_history = st.session_state.langchain_messages[1:40]
-            _chat_history_tranform = list(
-                chunked([msg.content for msg in _chat_history], n=2)
-            )
+                # Pass the Google API key from session state
+                response = chain.stream(
+                    {
+                        "question": prompt,
+                        "chat_history": _chat_history_tranform,
+                        "google_api_key": st.session_state.google_api_key
+                    }
+                )
 
-            from chain import chain
-            # Pass the google_api_key from session state here
-            response = chain.stream(
-                {"question": prompt, "chat_history": _chat_history_tranform, "google_api_key": google_api_key}
-            )
+                for res in response:
+                    full_response += res or ""
+                    message_placeholder.markdown(full_response + "|")
+                    message_placeholder.markdown(full_response)
 
-            for res in response:
-                full_response += res or ""
-                message_placeholder.markdown(full_response + "|")
-                message_placeholder.markdown(full_response)
+                msgs.add_user_message(prompt)
+                msgs.add_ai_message(full_response)
 
-            msgs.add_user_message(prompt)
-            msgs.add_ai_message(full_response)
-
-        except Exception as e:
-            st.error(f"An error occurred. {e}")
+            except Exception as e:
+                st.error(f"An error occurred. {e}")
