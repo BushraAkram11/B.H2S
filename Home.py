@@ -14,7 +14,7 @@ st.markdown(
     <style>
     .title {
         text-align: center;
-        font-size: 36px;
+        font-size: 42px;
         font-weight: bold;
         margin-bottom: 20px;
     }
@@ -34,7 +34,7 @@ st.markdown(
         margin-bottom: 20px;
     }
     </style>
-    <div class="title">Hope To Skill AI-Chatbot</div>
+    <div class="title">Hope To Skill</div>
     <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you today?</div>
     """,
     unsafe_allow_html=True
