@@ -6,9 +6,6 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 from more_itertools import chunked
-import requests
-import PyPDF2
-from io import BytesIO
 
 # --- Logo ---
 st.set_page_config(page_title="Hope_To_Skill AI Chatbot", page_icon=":robot_face:")
@@ -54,21 +51,8 @@ with st.sidebar:
         help="Enter your Google API key here",
         placeholder="Your Google API Key"
     )
-    st.session_state.google_api_key = user_google_api_key or ""  # Default key
-
-# Function to extract text from PDF
-def extract_text_from_pdf(pdf_url: str) -> str:
-    response = requests.get(pdf_url)
-    with BytesIO(response.content) as pdf_file:
-        reader = PyPDF2.PdfReader(pdf_file)
-        text = ""
-        for page in reader.pages:
-            text += page.extract_text() or ""
-    return text
-
-# Extract text from the provided PDF URL
-pdf_url = "https://drive.google.com/uc?export=download&id=12GSfTxJMpqtGKi5GWFZfIhBWRJ38nnVm"
-pdf_text = extract_text_from_pdf(pdf_url)
+    # Store the API key in session state
+    st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"  # Default key
 
 # Ensure the user has provided an API key
 if not st.session_state.google_api_key:
@@ -98,7 +82,7 @@ else:
 
             try:
                 _chat_history = st.session_state.langchain_messages[1:40]
-                _chat_history_transform = list(
+                _chat_history_tranform = list(
                     chunked([msg.content for msg in _chat_history], n=2)
                 )
 
@@ -108,9 +92,8 @@ else:
                 response = chain.stream(
                     {
                         "question": prompt,
-                        "chat_history": _chat_history_transform,
-                        "google_api_key": st.session_state.google_api_key,
-                        "pdf_text": pdf_text  # Pass PDF text as part of the context
+                        "chat_history": _chat_history_tranform,
+                        "google_api_key": st.session_state.google_api_key
                     }
                 )
 
@@ -123,4 +106,4 @@ else:
                 msgs.add_ai_message(full_response)
 
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred. {e}")
