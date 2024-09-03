@@ -45,7 +45,6 @@ with st.sidebar:
     st.image("https://yt3.googleusercontent.com/G5iAGza6uApx12jz1CBkuuysjvrbonY1QBM128IbDS6bIH_9FvzniqB_b5XdtwPerQRN9uk1=s900-c-k-c0x00ffffff-no-rj", width=290)
     # Sidebar with logo and Google API Key input
     with st.sidebar:
-        st.image("https://yt3.googleusercontent.com/G5iAGza6uApx12jz1CBkuuysjvrbonY1QBM128IbDS6bIH_9FvzniqB_b5XdtwPerQRN9uk1=s900-c-k-c0x00ffffff-no-rj", width=290)
         st.sidebar.subheader("Google API Key")
         user_google_api_key = st.sidebar.text_input("🔑 Enter your Google Gemini API key to Ask Questions", type="password", key="password_input", help="Enter your Google API key here", placeholder="Your Google API Key")
 prompt = ChatPromptTemplate(
