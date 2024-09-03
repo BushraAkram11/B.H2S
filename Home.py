@@ -34,7 +34,7 @@ st.markdown(
         margin-bottom: 20px;
     }
     </style>
-    <div class="title">Hope To Skill AI-Chatbot</div>
+    <div class="title">Hope To Skill</div>
     <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you today?</div>
     """,
     unsafe_allow_html=True
@@ -67,8 +67,8 @@ else:
 
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
 
-    if len(msgs.messages) == 0:
-        msgs.add_ai_message("How can I assist you today?")
+    #if len(msgs.messages) == 0:
+        #msgs.add_ai_message("How can I assist you today?")
 
     for msg in msgs.messages:
         st.chat_message(msg.type).write(msg.content)
