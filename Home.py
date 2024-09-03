@@ -52,7 +52,7 @@ with st.sidebar:
         placeholder="Your Google API Key"
     )
     # Store the API key in session state
-    st.session_state.google_api_key = user_google_api_key or ""  # Default key
+    st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"  # Default key
 
 # Ensure the user has provided an API key
 if not st.session_state.google_api_key:
@@ -67,14 +67,13 @@ else:
 
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
 
-    #if len(msgs.messages) == 0:
-        #msgs.add_ai_message("How can I assist you today?")
+    if len(msgs.messages) == 0:
+        msgs.add_ai_message("How can I assist you today?")
 
     for msg in msgs.messages:
         st.chat_message(msg.type).write(msg.content)
 
-    # Update the placeholder in the chat input to "How can I assist you today?"
-    if prompt := st.chat_input(placeholder="How can I assist you today?"):
+    if prompt := st.chat_input():
         st.chat_message("human").write(prompt)
 
         with st.chat_message("assistant"):
