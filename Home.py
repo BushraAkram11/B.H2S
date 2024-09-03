@@ -6,6 +6,9 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 from more_itertools import chunked
+import requests
+import PyPDF2
+from io import BytesIO
 
 # --- Logo ---
 st.set_page_config(page_title="Hope_To_Skill AI Chatbot", page_icon=":robot_face:")
@@ -34,8 +37,8 @@ st.markdown(
         margin-bottom: 20px;
     }
     </style>
-    <div class="title">Hope To Skill</div>
-    <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you?</div>
+    <div class="title">Hope To Skill AI-Chatbot</div>
+    <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you today?</div>
     """,
     unsafe_allow_html=True
 )
@@ -51,8 +54,21 @@ with st.sidebar:
         help="Enter your Google API key here",
         placeholder="Your Google API Key"
     )
-    # Store the API key in session state
     st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"  # Default key
+
+# Function to extract text from PDF
+def extract_text_from_pdf(pdf_url: str) -> str:
+    response = requests.get(pdf_url)
+    with BytesIO(response.content) as pdf_file:
+        reader = PyPDF2.PdfReader(pdf_file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() or ""
+    return text
+
+# Extract text from the provided PDF URL
+pdf_url = "https://drive.google.com/uc?export=download&id=1C7I5Y7PJcIPzjH_4T_PxfMdEw13_vz6a"
+pdf_text = extract_text_from_pdf(pdf_url)
 
 # Ensure the user has provided an API key
 if not st.session_state.google_api_key:
@@ -93,7 +109,8 @@ else:
                     {
                         "question": prompt,
                         "chat_history": _chat_history_tranform,
-                        "google_api_key": st.session_state.google_api_key
+                        "google_api_key": st.session_state.google_api_key,
+                        "pdf_text": pdf_text  # Pass PDF text as part of the context
                     }
                 )
 
