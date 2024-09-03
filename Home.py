@@ -67,8 +67,8 @@ else:
 
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
 
-    #if len(msgs.messages) == 0:
-        #msgs.add_ai_message("How can I assist you today?")
+    if len(msgs.messages) == 0:
+        msgs.add_ai_message("How can I assist you today?")
 
     for msg in msgs.messages:
         st.chat_message(msg.type).write(msg.content)
