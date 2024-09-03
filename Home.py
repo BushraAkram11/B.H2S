@@ -67,7 +67,7 @@ def extract_text_from_pdf(pdf_url: str) -> str:
     return text
 
 # Extract text from the provided PDF URL
-pdf_url = "https://drive.google.com/uc?export=download&id=1C7I5Y7PJcIPzjH_4T_PxfMdEw13_vz6a"
+pdf_url = "https://drive.google.com/uc?export=download&id=1YN_vxYFcLGeTQ6KU4LCDmb-A5IMQPtGq"
 pdf_text = extract_text_from_pdf(pdf_url)
 
 # Ensure the user has provided an API key
