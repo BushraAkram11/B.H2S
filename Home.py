@@ -1,6 +1,10 @@
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 import streamlit as st
-from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder
+from langchain.prompts import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    MessagesPlaceholder,
+)
 from more_itertools import chunked
 import requests
 import PyPDF2
@@ -66,10 +70,6 @@ def extract_text_from_pdf(pdf_url: str) -> str:
 pdf_url = "https://drive.google.com/uc?export=download&id=12GSfTxJMpqtGKi5GWFZfIhBWRJ38nnVm"
 pdf_text = extract_text_from_pdf(pdf_url)
 
-# Debug PDF text
-st.write("Extracted PDF Text:")
-st.write(pdf_text[:1000])  # Display the first 1000 characters for debugging
-
 # Ensure the user has provided an API key
 if not st.session_state.google_api_key:
     st.warning("Please enter your Google API key in the sidebar to use the chatbot.")
@@ -123,4 +123,4 @@ else:
                 msgs.add_ai_message(full_response)
 
             except Exception as e:
-                st.error(f"An error occurred. {e}")
+                st.error(f"An error occurred: {e}")
