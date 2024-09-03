@@ -43,10 +43,15 @@ st.markdown(
 # Sidebar with logo and Google API Key input
 with st.sidebar:
     st.image("https://yt3.googleusercontent.com/G5iAGza6uApx12jz1CBkuuysjvrbonY1QBM128IbDS6bIH_9FvzniqB_b5XdtwPerQRN9uk1=s900-c-k-c0x00ffffff-no-rj", width=290)
-    # Sidebar with logo and Google API Key input
-    with st.sidebar:
-        st.sidebar.subheader("Google API Key")
-        user_google_api_key = st.sidebar.text_input("🔑 Enter your Google Gemini API key to Ask Questions", type="password", key="password_input", help="Enter your Google API key here", placeholder="Your Google API Key")
+    st.sidebar.subheader("Google API Key")
+    user_google_api_key = st.sidebar.text_input("🔑 Enter your Google Gemini API key to Ask Questions", type="password", key="password_input", help="Enter your Google API key here", placeholder="Your Google API Key")
+
+# Default Google API Key (use your actual key here)
+default_google_api_key = "YOUR_DEFAULT_GOOGLE_API_KEY"
+
+# Determine which API key to use (user's key if provided, otherwise default key)
+google_api_key = user_google_api_key if user_google_api_key else default_google_api_key
+
 prompt = ChatPromptTemplate(
     messages=[
         MessagesPlaceholder(variable_name="chat_history"),
@@ -76,9 +81,9 @@ if prompt := st.chat_input():
             )
 
             from chain import chain
-            # Pass the google_api_key from session state here if needed
+            # Pass the google_api_key from session state here
             response = chain.stream(
-                {"question": prompt, "chat_history": _chat_history_tranform}
+                {"question": prompt, "chat_history": _chat_history_tranform, "google_api_key": google_api_key}
             )
 
             for res in response:
