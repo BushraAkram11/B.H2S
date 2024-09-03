@@ -51,8 +51,8 @@ with st.sidebar:
         help="Enter your Google API key here",
         placeholder="Your Google API Key"
     )
-    # Store the API key in session state
-    st.session_state.google_api_key = user_google_api_key
+    # Store the API key in session state with a default value
+    st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"
 
 # Ensure the user has provided an API key
 if not st.session_state.google_api_key:
