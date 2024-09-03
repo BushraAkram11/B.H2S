@@ -25,7 +25,7 @@ embeddings = HuggingFaceEmbeddings()
 
 # pass your google api key here
 
-google_api_key = "AIzaSyBXtfPk_O4kqGqyMK8iCD0KE_hfOCYAjUs"
+google_api_key = ""
 
 pinecone_api_key = "ae70f7c9-557a-4a1d-b944-5ecc208513ad"
 pc = Pinecone(api_key=pinecone_api_key)
