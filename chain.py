@@ -24,7 +24,7 @@ from langchain_pinecone import PineconeVectorStore
 embeddings = HuggingFaceEmbeddings()
 
 # Get the Google API key from session state
-google_api_key = st.session_state.get("google_api_key", "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU")
+google_api_key = st.session_state.get("google_api_key", "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU")  # Default key
 
 pinecone_api_key = "ae70f7c9-557a-4a1d-b944-5ecc208513ad"
 pc = Pinecone(api_key=pinecone_api_key)
