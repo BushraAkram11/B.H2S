@@ -35,7 +35,7 @@ st.markdown(
     }
     </style>
     <div class="title">Hope To Skill</div>
-    <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you today?</div>
+    <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you?</div>
     """,
     unsafe_allow_html=True
 )
