@@ -54,7 +54,7 @@ with st.sidebar:
         help="Enter your Google API key here",
         placeholder="Your Google API Key"
     )
-    st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"  # Default key
+    st.session_state.google_api_key = user_google_api_key or ""  # Default key
 
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_url: str) -> str:
