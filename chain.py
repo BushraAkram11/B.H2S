@@ -1,12 +1,20 @@
 from typing import List, Tuple
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    MessagesPlaceholder,
+)
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_core.prompts.prompt import PromptTemplate
-from langchain_core.load import dumps
+from langchain_core.load import dumps, loads
 from pinecone import Pinecone
-from langchain_core.runnables import RunnableBranch, RunnableLambda, RunnableParallel, RunnablePassthrough
+from langchain_core.runnables import (
+    RunnableBranch,
+    RunnableLambda,
+    RunnableParallel,
+    RunnablePassthrough,
+)
 from operator import itemgetter
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, AIMessage
@@ -36,9 +44,9 @@ Standalone question:"""  # noqa: E501
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_template)
 
 # RAG answer synthesis prompt
-template = """You are an assistant for question-answering tasks for the Hope To Skill AI training initiative. Use the following retrieved context to answer the user's question:
-Question: {question} 
+template = """You are an assistant for question-answering tasks for the Hope To Skill AI training initiative. Use the following context to answer the user's question:
 Context: {context} 
+Question: {question}
 Answer:"""
 
 ANSWER_PROMPT = ChatPromptTemplate.from_messages(
