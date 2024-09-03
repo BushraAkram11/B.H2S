@@ -14,7 +14,7 @@ st.markdown(
     <style>
     .title {
         text-align: center;
-        font-size: 42px;
+        font-size: 36px;
         font-weight: bold;
         margin-bottom: 20px;
     }
@@ -34,7 +34,7 @@ st.markdown(
         margin-bottom: 20px;
     }
     </style>
-    <div class="title">Hope To Skill</div>
+    <div class="title">Hope To Skill AI-Chatbot</div>
     <div class="subtitle">Welcome to Hope To Skill AI Chatbot, How can I help you today?</div>
     """,
     unsafe_allow_html=True
@@ -51,8 +51,8 @@ with st.sidebar:
         help="Enter your Google API key here",
         placeholder="Your Google API Key"
     )
-    # Store the API key in session state with a default value
-    st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"
+    # Store the API key in session state
+    st.session_state.google_api_key = user_google_api_key or "AIzaSyBTfA6_lri8MtjYKccTMZ8umT_uvXa6hHU"  # Default key
 
 # Ensure the user has provided an API key
 if not st.session_state.google_api_key:
@@ -67,13 +67,14 @@ else:
 
     msgs = StreamlitChatMessageHistory(key="langchain_messages")
 
-    #if len(msgs.messages) == 0:
-        #msgs.add_ai_message("How can I assist you today?")
+    if len(msgs.messages) == 0:
+        msgs.add_ai_message("How can I assist you today?")
 
     for msg in msgs.messages:
         st.chat_message(msg.type).write(msg.content)
 
-    if prompt := st.chat_input():
+    # Update the placeholder in the chat input to "How can I assist you today?"
+    if prompt := st.chat_input(placeholder="How can I assist you today?"):
         st.chat_message("human").write(prompt)
 
         with st.chat_message("assistant"):
